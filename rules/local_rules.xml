@@ -42,11 +42,21 @@ MITRE ATT&CK Mapping coverted into Rule:
 -->
 
 <!-- Advanced(Less false positives) Detection for Local Enumeration(T1087.001) -- 92033 -->
-<group name="">
-  <rule >
-    
+<group name="Powershell, Suspicious,">
+  <rule id="100501" level="10">
+    <if_sid>92033</if_sid>
+        <field name="win.eventdata.image">net.exe</field>
+        <field name="win.eventdata.CommandLine" type="pcre2">(?i)\b(?:user|localgroup)\b</field>
+        <field name="win.eventdata.CommandLine" type="pcre2">(?i)net\s+user</field>
+        <field name="win.eventdata.ParentCommandLine" type="pcre2">(?i)cmdkey(?:\.exe)?\s+/list</field>
+        <field name="win.eventdata.parentCommandLine" type="pcre2">(?i)net\+localgroup</field>
+
+    <description>Suspicious Account Discovery - User Enumeration</description>
+  <mitre>
+      <id>T1087.001</id>
+  </mitre> 
   </rule>
 </group>
 
-
+<!-- A
 
