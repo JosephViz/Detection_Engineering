@@ -1,1 +1,16 @@
+<!-- 
+Wazuh Detection Engineering Lab
+Custom Windows/Sysmon detection rules
 
+Objective:
+Create three custom detection rules, each with:
+1. A basic version to observe whether normal day-to-day activity triggers alerts.
+2. A tuned version designed to reduce false positives while still detecting suspicious behavior.
+
+MITRE ATT&CK Mapping coverted into Rule:
+1. T1097.001 Account Discovery == 100501 & 100502
+2.
+3.
+-->
+
+<!-- Basic Rule Detection -->
