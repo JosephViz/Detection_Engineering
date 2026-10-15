@@ -13,33 +13,22 @@ MITRE ATT&CK Mapping coverted into Rule:
 3.
 -->
 
+
+<!----------------T1087.001--------------------------------------------------------------------------------->
+
 <!-- Basic Rule Detection for Local Enumeration(T1087.001) -- 92033 
-<group name="Powershell, net.exe, suspicious,">
-    <rule id="100401" level="10">
-        <if_sid>92033</if_sid>
-        <field name="win.eventdata.image" type="pcre2">net.exe</field>
-        <field name="win.eventdata.commandLine" type="pcre2">(?i)\b(?:user|localgroup)\b</field>
-        
-        <description>Local Enumeration</description>
-        <mitre>
-          <id>T1087.001</id
-        </mitre>
+<group name="Powershell, Sysmon, suspicious,">
+    <rule id="100403" level="13"
+    <if_group>sysmon_event1</if_group>
+
+    <field name="win.eventdata.image" type="pcre2">(?i)\b(?:powershell|net|net1)\b(?:\.exe)?</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)\b(localgroup|user)\b</field>
+    <description>Account Enumeration</description>
+    <mitre>
+        <id>T1087.001</id>
+    </mitre>
     </rule>
 </group>
--->
-
-<!-- Basic rule Detection for Local Enumeration(T1087.001) -- 92027
-<group>
-  <rule id="100402" level="13">
-      <if_sid>92027</if_sid>
-      <field name="win.eventdata.commandLine" type="pcre2">(?i)get(?:\-localgroup)?\s+net\s+localgroup</field>
-      <description>Account Enumeration</description>
-      <mitre>
-        <id>T1087.001</id>
-      </mitre>
-  </rule>
-</group>
--->
 
 <!-- Advanced(Less false positives) Detection for Local Enumeration(T1087.001) -- 92033 -->
 <group name="Powershell, Suspicious,">
@@ -58,5 +47,36 @@ MITRE ATT&CK Mapping coverted into Rule:
   </rule>
 </group>
 
-<!-- A
+<!-- Advanced(Less False Positives) Detection for Local Enumeration(T1087.001) -- 92027 -->
+<group name="Powershell process,">
+    <rule id="100502" level="13">
+        <if_sid>92027</if_sid>
+        <field name="win.eventdata.commandLine" type="pcre2">(?i)net\s+user\s+get(?:\-localuser)?</field>
+        <field name="win.eventdata.commandLine" type="pcre2">((?i)cmdkey(?:\.exe)?\s+/list</field>
+        <field name="win.eventdata.commandLine" type="pcre2">(?i)get(?:\-localgroup)?\s+net\s+localgroup</field>
+        <field name="win.eventdata.image">powershell.exe</field>
+        <field name="win.eventdata.parentCommandLine">powershell.exe</field>
+
+        <description>Malicious Enumeration Execution</description>
+        <mitre>
+            <id>T1087.001</id>
+        </mitre>
+    </rule>
+</group>
+
+<!--------------------------------------------------------------------------------------------------------->
+
+<!-- T1053 SCHEDULED TASK/JOB Basic Rule Detection
+<group name="Sysmon, ScheduleTask,">
+    <rule id="200215" level="8">
+        <if_group>sysmon_event1</if_group>
+            <field name="win.eventdata.image">powershell.exe</field>
+            <field name="win.eventdata.commandLine" type="pcre2">(?i)New\-ScheduledTaskAction</field>
+            <field name="win.eventdata.commandLine" type="pcre2">(?i)\\Administrators</field>
+            <field name="win.eventdata.commandLine" type="pcre2">(?i)\-Execute</field>
+    </rule>
+</group>
+
+
+
 
