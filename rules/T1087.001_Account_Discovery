@@ -1,1 +1,47 @@
+<!-- Basic Rule (T1087.001) -->
 
+<group name="Powershell,Sysmon,Suspicious,">
+  <rule id="100403" level="13">
+    <if_group>sysmon_event1</if_group>
+      <field name="win.eventdata.image" type="pcre2">(?i)\b(?:powershell|net|net1)\b(?:\.exe)?</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)\b(localgroup|user)\b</field>
+
+      <description>Account Enumeration</description>
+      <mitre>
+        <id>T1087.001</id>
+      </mitre>
+    </rule>
+</group>
+
+<!-- Advanced Rule (T1087.001) -->
+<group name="Powershell, Suspicious,">
+  <rule id="100501" level="10">
+    <if_sid>92033</if_sid>
+      <field name="win.eventdata.image">net.exe</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)\b(?:user|localgroup)\b</field>
+      <field name="win.eventdata.parentCommandLine" type="pcre2">(?i)net\s+user</field>
+      <field name="win.eventdata.parentCommandLine" type="pcre2">(?i)cmdkey(?:\.exe)?\s+/list</field>
+      <field name="win.eventdata.parentCommandLine" type="pcre2">(?i)net\s+localgroup</field>
+
+      <description>Suspicious Account Discovery - User Enumeration</description>
+      <mitre>
+        <id>T1087.001</id>
+      </mitre>
+  </rule>
+</group>
+
+<group name="Powershell_process">
+   <rule id="100502" level="13">
+    <if_sid>92027</if_sid>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)net\s+user\s+get(?:\-localuser)?</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)cmdkey(?:\.exe)?\s+/list</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)get(?:\-localgroup)?\s+net\+localgroup</field>
+      <field name="win.eventdata.image">powershell.exe</field>
+      <field name="win.eventdata.parentCommandLine">powershell.exe</field>
+
+      <description>Malicious Enumeration execution</description>
+      <mitre>
+        <id>T1087.001</id>
+      </mitre>
+  </rule>
+</group>
