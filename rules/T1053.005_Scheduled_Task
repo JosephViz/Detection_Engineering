@@ -1,1 +1,28 @@
+<!-- Basic Rule (T1053.005) 
 
+<group name="Sysmon, scheduletask,">
+  <rule id="200215" level="8">
+    <if_group>sysmon_event1</if_group>
+      <field name="win.eventdata.image">powershell.exe</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)New\-ScheduledTaskAction</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)\\Administrators</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)\-Execute</field>
+      <description>Taskjob Execution</description>
+  </rule>
+</group>
+-->
+
+<!-- Advanced T1053.005 Schedule Task/Job Rule Detection -->
+  <group name="Sysmon, Scheduletask,">
+    <rule id="200216" level="13">
+      <if_group>sysmon_event1</if_group>
+        <field name="win.eventdata.image">powershell.exe</field>
+        <field name="win.eventdata.commandLine" type="pcre2">(?i)(?:New|Register)?\-ScheduledTask(?:Action|Trigger|Principle)?</field>
+        <field name="win.eventdata.commandLine" type="pcre2">(?i)\-RunLevel\s+Highest</field>
+        <field name="win.eventdata.commandLine"> AtomicTask</field>
+          <description>Malicious Taskjob Execution</description>
+            <mitre>
+              <id>T1053.005</id>
+            </mitre>
+      </rule>
+  </group>
