@@ -1,1 +1,26 @@
+<!-- Basic Rule (T1059.001)
 
+<group name="sysmon,powershell.exe,">
+  <rule id="300105" level="5">
+    <if_group>sysmon_event1</if_group>
+      <field name="win.eventdata.image">powershell\.exe</field>
+        <description>Powershell Execution </description>
+  </rule>
+</group>
+-->
+
+<!-- Advanced Rule (T1059.001) -->
+
+<group name="sysmon, powershell.exe,">
+  <rule id="300215" level="12">
+    <if_group>sysmon_event1</if_group>
+      <field name="win.eventdata.image" type="pcre2">powershell.exe</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)powershell(?:\.exe)</field>
+      <field name="win.eventdata.commandLine" type="pcre2">(?i)(EncodedCommandParamVariation|EncodedCommand|-enc)\s+(?:E)?\s+\-Execute</field>
+      <field name="win.eventdata.currentDirectory" type="pcre2">(?i)\\AppData(?:\\)?\\Local(?:\\)?\\Temp</field>
+        <description>Tuned Rule -- Powershell Execution</description>
+          <mitre>
+            <id>T1059.001</id>
+          </mitre>
+  </rule>
+</group>
